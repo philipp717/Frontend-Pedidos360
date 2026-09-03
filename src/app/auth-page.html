@@ -1,0 +1,28 @@
+<main class="auth-page">
+  <section class="auth-card" aria-labelledby="page-title">
+    <p class="eyebrow">Pedidos360</p>
+    <h1 id="page-title">Autenticación con Microsoft Entra ID</h1>
+
+    @if (isAuthenticated()) {
+      <p class="status status--authenticated">Usuario autenticado</p>
+
+      <div class="user-details">
+        @if (account()?.name; as name) {
+          <p><strong>Nombre:</strong> {{ name }}</p>
+        }
+        <p><strong>Usuario:</strong> {{ account()?.username }}</p>
+      </div>
+
+      <button type="button" (click)="logout()" [disabled]="interactionInProgress()">
+        Cerrar sesión
+      </button>
+    } @else {
+      <p class="status">No has iniciado sesión.</p>
+      <button type="button" (click)="login()" [disabled]="interactionInProgress()">
+        {{ interactionInProgress() ? 'Procesando...' : 'Iniciar sesión' }}
+      </button>
+    }
+
+    <a class="protected-link" routerLink="/pedidos">Ir al área protegida</a>
+  </section>
+</main>
