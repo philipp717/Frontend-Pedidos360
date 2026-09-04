@@ -35,6 +35,7 @@ export function msalInterceptorConfigFactory(): MsalInterceptorConfiguration {
     new Map();
 
   protectedResourceMap.set('http://localhost:8080/api/*', [apiScope]);
+  protectedResourceMap.set('http://localhost:8081/api/*', [apiScope]);
 
   return {
     interactionType: InteractionType.Redirect,
