@@ -1,59 +1,190 @@
-# Pedidos360Frontend
+# Pedidos360 Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.6.
+Frontend de la aplicación Pedidos360 desarrollado con Angular 22 y Microsoft Authentication Library (MSAL) para autenticación con Microsoft Entra ID.
 
-## Development server
+## Descripción general
 
-To start a local development server, run:
+Este proyecto es la capa de presentación de un sistema de gestión de pedidos y usuarios. La aplicación:
+
+- autentica usuarios con Microsoft Entra ID,
+- protege rutas privadas mediante `MsalGuard`,
+- consume endpoints del backend para listar pedidos y usuarios,
+- muestra el perfil del usuario autenticado,
+- gestiona sesiones y redirecciones tras el inicio/cierre de sesión.
+
+## Stack tecnológico
+
+- Angular 22
+- TypeScript
+- RxJS
+- MSAL Angular / MSAL Browser
+- Angular Router
+- Angular HttpClient
+
+## Funcionalidades principales
+
+- Inicio de sesión con Microsoft Entra ID
+- Cierre de sesión con redirección
+- Ruta raíz para autenticación
+- Ruta protegida `/pedidos` para consultar pedidos
+- Ruta protegida `/usuarios` para consultar usuarios
+- Ruta protegida `/mi-perfil` para ver datos del usuario autenticado
+- Manejo de errores de carga y estados de carga
+
+## Estructura del proyecto
+
+```text
+Frontend-Pedidos360/
+├── angular.json
+├── package.json
+├── tsconfig.json
+├── tsconfig.app.json
+├── tsconfig.spec.json
+├── public/
+├── src/
+│   ├── app/
+│   │   ├── app.config.ts
+│   │   ├── app.css
+│   │   ├── app.html
+│   │   ├── app.routes.ts
+│   │   ├── app.spec.ts
+│   │   ├── app.ts
+│   │   ├── auth-config.ts
+│   │   ├── auth-page.css
+│   │   ├── auth-page.html
+│   │   ├── auth-page.ts
+│   │   ├── mi-perfil-page.ts
+│   │   ├── pedido.model.ts
+│   │   ├── pedido.service.ts
+│   │   ├── usuario-autenticado.model.ts
+│   │   ├── usuario.model.ts
+│   │   ├── usuario.service.ts
+│   │   ├── usuarios-page.ts
+│   │   └── pedidos-page.ts
+│   ├── index.html
+│   ├── main.ts
+│   └── styles.css
+└── README.md
+```
+
+## Requisitos previos
+
+Antes de iniciar el proyecto, asegúrate de tener instalado:
+
+- Node.js 18+ o compatible con Angular 22
+- npm
+- acceso a un backend con los endpoints esperados
+- una aplicación registrada en Microsoft Entra ID con permisos adecuados para la API
+
+## Instalación
+
+1. Clona el repositorio.
+2. Entra a la carpeta del proyecto.
+3. Instala las dependencias:
+
+```bash
+npm install
+```
+
+## Configuración de autenticación
+
+La configuración de MSAL se encuentra en `src/app/auth-config.ts`.
+
+Los valores actuales apuntan a:
+
+- tenant Microsoft: `3441157d-ea5c-483f-a66d-e45c3ed7f9da`
+- clientId: `9e93805a-ed61-4fe8-8981-a839f016afc5`
+- scope de API: `api://5582b6c4-7ecd-4bed-9337-ba3f1f8e58e5/access_as_user`
+- redirectUri: `http://localhost:4200`
+
+Si cambias la API o el registro de la aplicación en Azure, deberás actualizar estos valores.
+
+## Endpoints del backend esperados
+
+El frontend consume dos servicios externos:
+
+- `http://localhost:8080/api/pedidos`
+- `http://localhost:8081/api/usuarios`
+
+Además, el servicio de usuarios expone:
+
+- `http://localhost:8081/api/usuarios/me`
+
+Estos endpoints deben estar disponibles antes de acceder a las rutas protegidas.
+
+## Ejecución en desarrollo
+
+Inicia el servidor de Angular:
+
+```bash
+npm start
+```
+
+O también:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Luego abre en el navegador:
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```text
+http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Rutas de la aplicación
 
-```bash
-ng generate --help
+| Ruta | Descripción | Protegida |
+| --- | --- | --- |
+| `/` | Pantalla de autenticación | No |
+| `/pedidos` | Lista de pedidos del sistema | Sí |
+| `/usuarios` | Listado de usuarios | Sí |
+| `/mi-perfil` | Información del usuario autenticado | Sí |
+
+## Servicios principales
+
+### `PedidoService`
+
+Se encarga de consultar los pedidos desde el backend:
+
+```ts
+listarTodos(): Observable<Pedido[]>
 ```
 
-## Building
+### `UsuarioService`
 
-To build the project run:
+Se encarga de consultar usuarios y el perfil del usuario autenticado:
 
-```bash
-ng build
+```ts
+listarUsuarios(): Observable<Usuario[]>
+obtenerMiPerfil(): Observable<UsuarioAutenticado>
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Compilación de producción
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Para generar una build de producción:
 
 ```bash
-ng test
+npm run build
 ```
 
-## Running end-to-end tests
+La salida se genera en la carpeta `dist/`.
 
-For end-to-end (e2e) testing, run:
+## Pruebas
+
+Se usa Angular con configuración de pruebas. Para ejecutar las pruebas:
 
 ```bash
-ng e2e
+npm test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Notas finales
 
-## Additional Resources
+Este frontend está pensado como una SPA moderna para consumo de servicios de negocio protegidos. Su flujo principal es:
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+1. iniciar sesión con Microsoft Entra ID,
+2. obtener el token para la API,
+3. acceder a rutas protegidas,
+4. consultar datos reales del backend.
+
+
