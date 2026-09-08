@@ -9,7 +9,8 @@ import { Usuario } from './usuario.model';
 })
 export class UsuarioService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8081/api/usuarios';
+  private readonly apiUrl =
+    'https://ehj09v655m.execute-api.us-east-1.amazonaws.com/api/usuarios';
 
   listarUsuarios(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(this.apiUrl);

@@ -8,7 +8,8 @@ import { Pedido } from './pedido.model';
 })
 export class PedidoService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8080/api/pedidos';
+  private readonly apiUrl =
+    'https://ehj09v655m.execute-api.us-east-1.amazonaws.com/api/pedidos';
 
   listarTodos(): Observable<Pedido[]> {
     return this.http.get<Pedido[]>(this.apiUrl);

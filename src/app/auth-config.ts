@@ -34,8 +34,10 @@ export function msalInterceptorConfigFactory(): MsalInterceptorConfiguration {
   const protectedResourceMap: MsalInterceptorConfiguration['protectedResourceMap'] =
     new Map();
 
-  protectedResourceMap.set('http://localhost:8080/api/*', [apiScope]);
-  protectedResourceMap.set('http://localhost:8081/api/*', [apiScope]);
+  protectedResourceMap.set(
+    'https://ehj09v655m.execute-api.us-east-1.amazonaws.com/api/*',
+    [apiScope],
+  );
 
   return {
     interactionType: InteractionType.Redirect,
