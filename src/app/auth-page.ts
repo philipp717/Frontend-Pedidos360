@@ -53,7 +53,7 @@ export class AuthPage implements OnInit {
     this.authService
       .logoutRedirect({
         account: this.authService.instance.getActiveAccount() ?? undefined,
-        postLogoutRedirectUri: 'http://localhost:4200',
+        postLogoutRedirectUri: window.location.origin,
       })
       .subscribe({
         error: (error) => {
